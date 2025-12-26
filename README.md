@@ -25,7 +25,7 @@ Based on the fake probability:
 - Fake probability ≤ 0.40 → Real Job.
 - Fake probability between 0.40 and 0.60 → Unsure.
 - Fake probability ≥ 0.60 → Fake Job.
-The "Unsure" category is added to handle borderline cases and reduce wrong predictions.
+- The "Unsure" category is added to handle borderline cases and reduce wrong predictions.
 
 
 ## Web Application
