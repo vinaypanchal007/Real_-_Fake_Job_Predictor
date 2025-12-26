@@ -1,18 +1,15 @@
-import streamlit as st # type: ignore
+import streamlit as st
 import joblib
 import re
 
-# ---------------- CONFIG ----------------
-MODEL_PATH = r"C:\Users\vinay\OneDrive\Desktop\Vinay\fakejob_pipeline.joblib"
+MODEL_PATH = "fakejob_pipeline.joblib"
 
-# ---------------- LOAD MODEL ----------------
 @st.cache_resource
 def load_model():
     return joblib.load(MODEL_PATH)
 
 model = load_model()
 
-# ---------------- CLEAN TEXT (SAME AS TRAINING) ----------------
 def clean_text(text):
     text = text.lower()
     text = re.sub(r'http\S+|www\.\S+', '', text)
@@ -20,7 +17,6 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text).strip()
     return text
 
-# ---------------- DECISION LOGIC ----------------
 def decide_label(fake_prob):
     if fake_prob >= 0.6:
         return "Fake Job"
@@ -29,7 +25,6 @@ def decide_label(fake_prob):
     else:
         return "Unsure"
 
-# ---------------- STREAMLIT UI ----------------
 st.set_page_config(page_title="Fake Job Detector", layout="centered")
 
 st.title("Fake Job Posting Detection")
@@ -67,4 +62,5 @@ if st.button("Predict"):
     st.caption(
         "Predictions are probability-based. Borderline cases are marked as UNSURE "
         "to reduce false accusations."
+
     )
