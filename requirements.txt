@@ -1,0 +1,7 @@
+Packages needed for this model
+
+-pandas
+-numpy
+-scikit-learn
+-joblib
+-streamlit
