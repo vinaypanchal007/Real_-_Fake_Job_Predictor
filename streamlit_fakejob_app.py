@@ -34,33 +34,52 @@ title = st.text_input("Job Title")
 company_profile = st.text_area("Company Profile")
 description = st.text_area("Job Description")
 requirements = st.text_area("Requirements")
-benefits = st.text_area("Benefits")
+benefits = st.text_area("Benefits (Optional)")
 
 if st.button("Predict"):
-    combined_text = " ".join([
-        title,
-        company_profile,
-        description,
-        requirements,
-        benefits
-    ])
 
-    cleaned_text = clean_text(combined_text)
+    required_fields = {
+        "Job Title": title,
+        "Company Profile": company_profile,
+        "Job Description": description,
+        "Requirements": requirements
+    }
 
-    fake_prob = model.predict_proba([cleaned_text])[0][1]
-    result = decide_label(fake_prob)
+    missing_fields = [
+        name for name, value in required_fields.items()
+        if not value.strip()
+    ]
 
     st.markdown("### 🔍 Prediction Result")
 
-    if result == "Fake Job":
-        st.error(f"**FAKE JOB POSTING**")
-    elif result == "Real Job":
-        st.success(f"**REAL JOB POSTING**")
+    if missing_fields:
+        st.error("**FAKE JOB POSTING**")
+        st.caption(
+            "Reason: Missing required fields → "
+            + ", ".join(missing_fields)
+        )
     else:
-        st.warning(f"**UNSURE — NEEDS MANUAL REVIEW**")
+        combined_text = " ".join([
+            title,
+            company_profile,
+            description,
+            requirements,
+            benefits
+        ])
 
-    st.caption(
-        "Predictions are probability-based. Borderline cases are marked as UNSURE "
-        "to reduce false accusations."
+        cleaned_text = clean_text(combined_text)
 
-    )
+        fake_prob = model.predict_proba([cleaned_text])[0][1]
+        result = decide_label(fake_prob)
+
+        if result == "Fake Job":
+            st.error("**FAKE JOB POSTING**")
+        elif result == "Real Job":
+            st.success("**REAL JOB POSTING**")
+        else:
+            st.warning("**UNSURE — NEEDS MANUAL REVIEW**")
+
+        st.caption(
+            "Predictions are probability-based. "
+            "Borderline cases are marked as UNSURE to reduce false accusations."
+        )
