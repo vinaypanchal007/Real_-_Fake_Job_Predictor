@@ -2,7 +2,7 @@ import streamlit as st
 import joblib
 import re
 
-MODEL_PATH = "fakejob_pipeline.joblib"
+MODEL_PATH = r"C:\Users\vinay\OneDrive\Desktop\Vinay\fakejob_pipeline.joblib"
 
 @st.cache_resource
 def load_model():
@@ -50,7 +50,7 @@ if st.button("Predict"):
         if not value.strip()
     ]
 
-    st.markdown("###Prediction Result")
+    st.markdown("### 🔍 Prediction Result")
 
     if missing_fields:
         st.error("**FAKE JOB POSTING**")
@@ -58,6 +58,7 @@ if st.button("Predict"):
             "Reason: Missing required fields → "
             + ", ".join(missing_fields)
         )
+
     else:
         combined_text = " ".join([
             title,
@@ -68,19 +69,26 @@ if st.button("Predict"):
         ])
 
         cleaned_text = clean_text(combined_text)
+        word_count = len(cleaned_text.split())
 
-        fake_prob = model.predict_proba([cleaned_text])[0][1]
-        result = decide_label(fake_prob)
-
-        if result == "Fake Job":
+        if word_count < 60:
             st.error("**FAKE JOB POSTING**")
-        elif result == "Real Job":
-            st.success("**REAL JOB POSTING**")
+            st.caption(
+                f"Reason: Low content quality (only {word_count} words)"
+            )
+
         else:
-            st.warning("**UNSURE — NEEDS MANUAL REVIEW**")
+            fake_prob = model.predict_proba([cleaned_text])[0][1]
+            result = decide_label(fake_prob)
 
-        st.caption(
-            "Predictions are probability-based. "
-            "Borderline cases are marked as UNSURE to reduce false accusations."
-        )
+            if result == "Fake Job":
+                st.error("**FAKE JOB POSTING**")
+            elif result == "Real Job":
+                st.success("**REAL JOB POSTING**")
+            else:
+                st.warning("**UNSURE — NEEDS MANUAL REVIEW**")
 
+            st.caption(
+                "Predictions are probability-based. "
+                "Borderline cases are marked as UNSURE to reduce false accusations."
+            )
