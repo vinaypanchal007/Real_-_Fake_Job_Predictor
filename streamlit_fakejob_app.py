@@ -50,7 +50,7 @@ if st.button("Predict"):
         if not value.strip()
     ]
 
-    st.markdown("### 🔍 Prediction Result")
+    st.markdown("###Prediction Result")
 
     if missing_fields:
         st.error("**FAKE JOB POSTING**")
@@ -83,3 +83,4 @@ if st.button("Predict"):
             "Predictions are probability-based. "
             "Borderline cases are marked as UNSURE to reduce false accusations."
         )
+
