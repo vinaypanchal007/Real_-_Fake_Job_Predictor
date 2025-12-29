@@ -2,7 +2,7 @@ import streamlit as st
 import joblib
 import re
 
-MODEL_PATH = r"C:\Users\vinay\OneDrive\Desktop\Vinay\fakejob_pipeline.joblib"
+MODEL_PATH = "fakejob_pipeline.joblib"
 
 @st.cache_resource
 def load_model():
@@ -92,3 +92,4 @@ if st.button("Predict"):
                 "Predictions are probability-based. "
                 "Borderline cases are marked as UNSURE to reduce false accusations."
             )
+
